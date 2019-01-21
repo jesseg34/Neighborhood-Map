@@ -9,5 +9,7 @@ class Resturant {
         });
         this.infowindow = new google.maps.InfoWindow();
         this.yelpId = yelpId;
+        // Called from Knockout.js
+        this.markerClicked = () => { google.maps.event.trigger(this.marker, 'click'); }
     }
 }

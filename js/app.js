@@ -8,17 +8,7 @@ function initMap() {
         center: { lat: 45.5122, lng: -122.6587 }
     });
 
-    // Create the markers and add click event
-    resturantData.forEach((resturant) => {
-        let resturantMarker = new Resturant(
-            resturant.title,
-            resturant.position,
-            map,
-            resturant.yelpId);
-        resturantMarker.marker.addListener('click', () => {
-            gmMarkerClicked(resturantMarker);
-        });
-    });
+    ko.applyBindings(new ViewModel());
 }
 
 // Fetch the yelp info if not already and show the info window
@@ -43,7 +33,7 @@ async function gmMarkerClicked(resturantMarker) {
             yelpInfo.location.display_address);
         resturantMarker.infowindow.setContent(info);
     }
-    
+
     resturantMarker.infowindow.open(map, resturantMarker.marker);
     currentOpenedInfoWindow = resturantMarker.infowindow;
     resturantMarker.marker.setAnimation(google.maps.Animation.BOUNCE);
@@ -63,7 +53,7 @@ function buildInfoWindow(title, rating, displayAddress) {
 }
 
 function fetchYelpInformation(yelpId) {
-    var access_token = 'jBnjZ7DSRcNbIs_m3zqS0cxmB910Kb-13shJTO8ZTUiSKQxpL-zLGKzHcs0xnFwYyvZ9aduzO36vJq6CL4RAT3FLn5fA1nKANo2ByIWuPETeJ1rn-Yq9t2wSRufhW3Yx';
+    let access_token = 'jBnjZ7DSRcNbIs_m3zqS0cxmB910Kb-13shJTO8ZTUiSKQxpL-zLGKzHcs0xnFwYyvZ9aduzO36vJq6CL4RAT3FLn5fA1nKANo2ByIWuPETeJ1rn-Yq9t2wSRufhW3Yx';
     const results = jQuery.ajax({
         url: 'https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/' + yelpId,
         type: 'GET',
@@ -72,6 +62,34 @@ function fetchYelpInformation(yelpId) {
         },
     });
     return results;
+}
+
+function ViewModel () {
+    let self = this;
+
+    this.resturants = ko.observableArray();
+    this.activeLocation = ko.observable();
+
+    // Create the markers and add click event
+    resturantData.forEach((resturant) => {
+        let resturantMarker = new Resturant(
+            resturant.title,
+            resturant.position,
+            map,
+            resturant.yelpId);
+        resturantMarker.marker.addListener('click', () => {
+            gmMarkerClicked(resturantMarker);
+        });
+
+        // Add marker to the observable
+        self.resturants.push(resturantMarker);
+    });
+}
+
+function navItemClicked(marker) {
+    alert("clicked");
+    console.log(marker);
+    google.maps.event.trigger(marker, 'click');
 }
 
 function gmError() {
