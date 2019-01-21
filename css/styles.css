@@ -7,3 +7,10 @@ body {
 #map {
     height: 100%;
 }
+.resturantItem:hover {
+    background-color: lightgrey;
+}
+.resturantItem {
+    cursor: pointer;
+    list-style-type: none;
+}
