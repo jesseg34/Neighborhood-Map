@@ -1,5 +1,5 @@
 class Resturant {
-    constructor(title, position, gmInstance) {
+    constructor(title, position, gmInstance, yelpId) {
         this.title = title;
         this.marker = new google.maps.Marker({
             position: position,
@@ -8,5 +8,6 @@ class Resturant {
             animation: google.maps.Animation.DROP
         });
         this.infowindow = new google.maps.InfoWindow();
+        this.yelpId = yelpId;
     }
 }
