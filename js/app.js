@@ -69,6 +69,7 @@ function ViewModel () {
 
     this.resturants = ko.observableArray();
     this.activeLocation = ko.observable();
+    this.search = ko.observable('');
 
     // Create the markers and add click event
     resturantData.forEach((resturant) => {
@@ -84,12 +85,15 @@ function ViewModel () {
         // Add marker to the observable
         self.resturants.push(resturantMarker);
     });
-}
 
-function navItemClicked(marker) {
-    alert("clicked");
-    console.log(marker);
-    google.maps.event.trigger(marker, 'click');
+    // Compare the search bar with the resturants on each search keypress
+    this.searchResults = ko.computed(() => {
+        return this.resturants().filter((resturant) => {
+            var isMatched = resturant.title.toLowerCase().includes(this.search().toLowerCase());
+            resturant.marker.setVisible(isMatched);
+            return isMatched;
+        }, this);
+    }, this);
 }
 
 function gmError() {

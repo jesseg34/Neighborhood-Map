@@ -23,7 +23,8 @@
                         <div class="sidebar-header">
                             <h4>Favorite Portland Resturants</h4>
                         </div>
-                        <ul class="list-unstyled components" data-bind="foreach: resturants">
+                        <input class="w-100" placeholder="Search/Filter" data-bind="textInput: search, valueUpdate: 'afterkeydown'">
+                        <ul class="list-unstyled components" data-bind="foreach: searchResults">
                             <li class="list-group-item resturantItem" data-bind="text: title, click: markerClicked"></li>
                         </ul>
                     </nav>
