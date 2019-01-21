@@ -1,6 +1,7 @@
 let map;
 let currentOpenedInfoWindow = null;
 
+// Called by the google api
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         zoom: 13,
@@ -34,6 +35,7 @@ async function gmMarkerClicked(resturantMarker) {
         resturantMarker.infowindow.setContent(info);
     }
 
+    // Open the info window and animate marker
     resturantMarker.infowindow.open(map, resturantMarker.marker);
     currentOpenedInfoWindow = resturantMarker.infowindow;
     resturantMarker.marker.setAnimation(google.maps.Animation.BOUNCE);
@@ -53,7 +55,7 @@ function buildInfoWindow(title, rating, displayAddress) {
 }
 
 function fetchYelpInformation(yelpId) {
-    let access_token = 'jBnjZ7DSRcNbIs_m3zqS0cxmB910Kb-13shJTO8ZTUiSKQxpL-zLGKzHcs0xnFwYyvZ9aduzO36vJq6CL4RAT3FLn5fA1nKANo2ByIWuPETeJ1rn-Yq9t2wSRufhW3Yx';
+    const access_token = 'jBnjZ7DSRcNbIs_m3zqS0cxmB910Kb-13shJTO8ZTUiSKQxpL-zLGKzHcs0xnFwYyvZ9aduzO36vJq6CL4RAT3FLn5fA1nKANo2ByIWuPETeJ1rn-Yq9t2wSRufhW3Yx';
     const results = jQuery.ajax({
         url: 'https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/' + yelpId,
         type: 'GET',
@@ -67,9 +69,9 @@ function fetchYelpInformation(yelpId) {
 function ViewModel () {
     let self = this;
 
-    this.resturants = ko.observableArray();
-    this.activeLocation = ko.observable();
-    this.search = ko.observable('');
+    self.resturants = ko.observableArray();
+    self.activeLocation = ko.observable();
+    self.search = ko.observable('');
 
     // Create the markers and add click event
     resturantData.forEach((resturant) => {
@@ -87,7 +89,7 @@ function ViewModel () {
     });
 
     // Compare the search bar with the resturants on each search keypress
-    this.searchResults = ko.computed(() => {
+    self.searchResults = ko.computed(() => {
         return this.resturants().filter((resturant) => {
             var isMatched = resturant.title.toLowerCase().includes(this.search().toLowerCase());
             resturant.marker.setVisible(isMatched);
